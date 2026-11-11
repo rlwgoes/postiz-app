@@ -1,7 +1,6 @@
 services:
   postiz:
     image: ghcr.io/gitroomhq/postiz-app:latest
-    container_name: postiz
     restart: always
     environment:
       # === Required Settings
@@ -133,7 +132,6 @@ services:
 
   postiz-postgres:
     image: postgres:17-alpine
-    container_name: postiz-postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD}
@@ -150,7 +148,6 @@ services:
       retries: 3
   postiz-redis:
     image: redis:7.2
-    container_name: postiz-redis
     restart: always
     healthcheck:
       test: redis-cli ping
@@ -166,7 +163,6 @@ services:
   # Temporal Stack
   # -----------------------
   temporal-elasticsearch:
-    container_name: temporal-elasticsearch
     image: elasticsearch:7.17.27
     environment:
       - cluster.routing.allocation.disk.threshold_enabled=true
@@ -184,7 +180,6 @@ services:
       - /var/lib/elasticsearch/data
 
   temporal-postgresql:
-    container_name: temporal-postgresql
     image: postgres:16
     environment:
       POSTGRES_PASSWORD: temporal
@@ -197,7 +192,6 @@ services:
       - /var/lib/postgresql/data
 
   temporal:
-    container_name: temporal
     image: temporalio/auto-setup:1.28.1
     depends_on:
       - temporal-postgresql
@@ -221,7 +215,6 @@ services:
       kompose.volume.type: configMap
 
   temporal-admin-tools:
-    container_name: temporal-admin-tools
     image: temporalio/admin-tools:1.28.1-tctl-1.18.4-cli-1.4.1
     environment:
       - TEMPORAL_ADDRESS=temporal:7233
@@ -234,7 +227,6 @@ services:
     tty: true
 
   temporal-ui:
-    container_name: temporal-ui
     image: temporalio/ui:2.34.0
     environment:
       - TEMPORAL_ADDRESS=temporal:7233
@@ -260,4 +252,3 @@ networks:
     external: false
   temporal-network:
     driver: bridge
-    name: temporal-network
